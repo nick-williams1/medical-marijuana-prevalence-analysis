@@ -1,0 +1,2 @@
+# medical-marijuana-prevalence-analysis
+This repository contains SAS code for models that estimate changes in marijuana past month use, past year use, and first use among different age groups comparing before and after medical marijuana laws are passed stratified by those laws restrictiveness as categorized by Chapman et al. (2016) "Capturing Heterogeneity in Medical Marijuana Policies: A Taxonomy of Regulatory Regimes Across the United States"
