@@ -1,5 +1,4 @@
-
-ods noproctitle; 
+﻿ods noproctitle; 
 options nodate;
 
 ***********************************************************************************************************************************************
@@ -9,21 +8,21 @@ options nodate;
  *importing data for past month use; 
 
 proc import out = age1
- 	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
+ 	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "12-17"; 
 run; 
 
 proc import out = age2
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "18-25"; 
 run; 
 
 proc import out = age3
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_month\past_month_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "26+"; 
@@ -193,7 +192,8 @@ data past_month;
 		if abbrev = 'OR' then init = 3; 
 		if abbrev = 'RI' then init = 4; 
 		if abbrev = 'VT' then init = 3; 
-		if abbrev = 'WA' then init = 5; 
+			if abbrev = 'VT' and year < 2006 then init = 2; 
+		if abbrev = 'WA' then init = 5;
 
 		if abbrev = 'AK' then quant = 3; 
 		if abbrev = 'AZ' then quant = 3; 
@@ -222,7 +222,8 @@ data past_month;
 		if abbrev = 'AK' then dist = 5; 
 		if abbrev = 'AZ' then dist = 3; 
 		if abbrev = 'CA' then dist = 4; 
-		if abbrev = 'CO' then dist = 3; 
+		if abbrev = 'CO' then dist = 3;
+			if abbrev = 'CO' and year < 2010 then dist = 4;  
 		if abbrev = 'CT' then dist = 1; 
 		if abbrev = 'DE' then dist = 1; 
 		if abbrev = 'HI' then dist = 5; 
@@ -233,40 +234,22 @@ data past_month;
 		if abbrev = 'MI' then dist = 5; 
 		if abbrev = 'MN' then dist = 1; 
 		if abbrev = 'MT' then dist = 5; 
-		if abbrev = 'NV' then dist = 3; 
+		if abbrev = 'NV' then dist = 3;
+			if abbrev = 'NV' and year < 2013 then dist = 5; 
 		if abbrev = 'NH' then dist = 2; 
 		if abbrev = 'NJ' then dist = 1; 
 		if abbrev = 'NM' then dist = 2; 
 		if abbrev = 'NY' then dist = 1; 
-		if abbrev = 'OR' then dist = 3; 
+		if abbrev = 'OR' then dist = 3;
+			if abbrev = 'OR' and year < 2013 then dist = 5; 
 		if abbrev = 'RI' then dist = 3; 
+			if abbrev = 'RI' and year < 2009 then dist = 4;
 		if abbrev = 'VT' then dist = 2; 
+			if abbrev = 'VT' and year < 2011 then dist = 4;
 		if abbrev = 'WA' then dist = 4;
- 
-		if abbrev = 'AK' then overall = 9; 
-		if abbrev = 'AZ' then overall = 9; 
-		if abbrev = 'CA' then overall = 13; 
-		if abbrev = 'CO' then overall = 10; 
-		if abbrev = 'CT' then overall = 5; 
-		if abbrev = 'DE' then overall = 6; 
-		if abbrev = 'HI' then overall = 12; 
-		if abbrev = 'IL' then overall = 8; 
-		if abbrev = 'ME' then overall = 12; 
-		if abbrev = 'MA' then overall = 12; 
-		if abbrev = 'MD' then overall = 6; 
-		if abbrev = 'MI' then overall = 12; 
-		if abbrev = 'MN' then overall = 4; 
-		if abbrev = 'MT' then overall = 13; 
-		if abbrev = 'NV' then overall = 8; 
-		if abbrev = 'NH' then overall = 7; 
-		if abbrev = 'NJ' then overall = 4; 
-		if abbrev = 'NM' then overall = 10; 
-		if abbrev = 'NY' then overall = 4; 
-		if abbrev = 'OR' then overall = 11; 
-		if abbrev = 'RI' then overall = 11; 
-		if abbrev = 'VT' then overall = 7; 
-		if abbrev = 'WA' then overall = 14;
-run; 
+
+		overall = sum(init, quant, dist); 
+run;  
 
 proc format; 
 	value illegal_fmt . = "illegal";
@@ -286,6 +269,10 @@ proc means data = past_month median;
 	var overall; 
 proc freq data = past_month; 
 	table overall; 
+run; 
+
+proc univariate data = past_month;  
+	histogram overall / kernel; 
 run; 
 
 proc means data = past_month median; 
@@ -344,7 +331,7 @@ run;
 
 *model looking at after vs. before past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_noChapman.pdf" style = journal2; 
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_noChapman.pdf" style = journal2; 
 
 proc mixed data = past_month;
 	title "Past month marijuana use: Cubic spline, age";
@@ -370,7 +357,7 @@ ods pdf close;
 
 *after vs before including new states; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_noChapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_noChapman.pdf" style = journal2;
 
 
 proc mixed data = past_month_newStates;
@@ -398,7 +385,7 @@ ods pdf close;
 
 *model for overall restrictiveness: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = past_month; 
 	title "Past month marijuana use: Cubic spline, age, binary MML Chapman index";
@@ -447,7 +434,7 @@ ods pdf close;
 
 *model for overall restrictiveness: past month use including new states; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = past_month_newStates; 
 	title "Past month marijuana use (including new states): Cubic spline, age, binary MML Chapman index";
@@ -496,7 +483,7 @@ ods pdf close;
 
 *initiation binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_initiation.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_initiation.pdf" style = journal2;
 
 proc mixed data = past_month; 
 	title "Marijuana use in last month: Cubic spline, age, binary initiation MML Chapman index";
@@ -545,7 +532,7 @@ ods pdf close;
 
 *initiation binary model (including new states): past month use;
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_initiation_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_initiation_Chapman.pdf" style = journal2;
 
 proc mixed data = past_month_newStates; 
 	title "Past month marijuana use (including new states): Cubic spline, age, binary initiation MML Chapman index";
@@ -594,7 +581,7 @@ ods pdf close;
 
 *quantity binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_quantity.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_quantity.pdf" style = journal2;
 
 proc mixed data = past_month; 
 	title "Marijuana use in last month: Cubic spline, age, binary quantity MML Chapman index";
@@ -643,7 +630,7 @@ ods pdf close;
 
 *quantity binary model (including new states): past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_quantity_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_quantity_Chapman.pdf" style = journal2;
 
 proc mixed data = past_month_newStates; 
 	title "Past month marijuana use (including new states): Cubic spline, age, binary quantity MML Chapman index";
@@ -693,7 +680,7 @@ ods pdf close;
 
 *distribution binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_distribution.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\past_month_2003_2016_binary_distribution.pdf" style = journal2;
 
 proc mixed data = past_month; 
 	title "Marijuana use in last month: Cubic spline, age, binary distribution MML Chapman index";
@@ -742,7 +729,7 @@ ods pdf close;
 
 *distribution binary model (including new states): past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_distribution_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month\new_states_past_month_2003_2016_distribution_Chapman.pdf" style = journal2;
 
 proc mixed data = past_month_newStates; 
 	title "Past month marijuana use (including new states): Cubic spline, age, binary distribution MML Chapman index";
@@ -797,21 +784,21 @@ ods pdf close;
 importing data for first use of marijuana; 
 
 proc import out = first1
- 	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
+ 	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "12-17"; 
 run; 
 
 proc import out = first2
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "18-25"; 
 run; 
 
 proc import out = first3
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\first_use\first_use_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "26+"; 
@@ -939,7 +926,7 @@ run;
 
 *after vs. before: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_noChapman.pdf" style = journal2; 
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_noChapman.pdf" style = journal2; 
 
 proc mixed data = first_use;
 	title "First use of marijuana: Cubic spline, age";
@@ -966,7 +953,7 @@ ods pdf close;
 
 *after vs. before (including new states): first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_noChapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_noChapman.pdf" style = journal2;
 
 
 proc mixed data = first_use_newStates;
@@ -994,7 +981,7 @@ ods pdf close;
 
 *overall restrictiveness model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = first_use; 
 	title "First use of marijuna: Cubic spline, age, binary MML Chapman index";
@@ -1043,7 +1030,7 @@ ods pdf close;
 
 *overall restrictiveness (including new states): first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = first_use_newStates; 
 	title "First use of marijuana (including new states): Cubic spline, age, binary MML Chapman index";
@@ -1092,7 +1079,7 @@ ods pdf close;
 
 *initiation binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_initiation.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_initiation.pdf" style = journal2;
 
 proc mixed data = first_use; 
 	title "First use of marijuana: Cubic spline, age, binary initiation MML Chapman index";
@@ -1141,7 +1128,7 @@ ods pdf close;
 
 *initiation binary model (including new states): first use;
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_initiation_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_initiation_Chapman.pdf" style = journal2;
 
 proc mixed data = first_use_newStates; 
 	title "First use of marijuana (including new states): Cubic spline, age, binary initiation MML Chapman index";
@@ -1190,7 +1177,7 @@ ods pdf close;
 
 *quantity binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_quantity.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_quantity.pdf" style = journal2;
 
 proc mixed data = first_use; 
 	title "First use of marijuana: Cubic spline, age, binary quantity MML Chapman index";
@@ -1239,7 +1226,7 @@ ods pdf close;
 
 *quantity binary model (including new states): past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_quantity_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_quantity_Chapman.pdf" style = journal2;
 
 proc mixed data = first_use_newStates; 
 	title "First use of marijuana (including new states): Cubic spline, age, binary quantity MML Chapman index";
@@ -1288,7 +1275,7 @@ ods pdf close;
 
 *distribution binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_distribution.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\first_use_2003_2016_binary_distribution.pdf" style = journal2;
 
 proc mixed data = first_use; 
 	title "First use of marijuana: Cubic spline, age, binary distribution MML Chapman index";
@@ -1337,7 +1324,7 @@ ods pdf close;
 
 *distribution binary model (including new states): first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_distribution_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use\new_states_first_use_2003_2016_distribution_Chapman.pdf" style = journal2;
 
 proc mixed data = first_use_newStates; 
 	title "First use of marijuana (including new states): Cubic spline, age, binary distribution MML Chapman index";
@@ -1392,21 +1379,21 @@ ods pdf close;
 importing data for past year use of marijuana; 
 
 proc import out = age12
- 	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
+ 	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "12-17"; 
 run; 
 
 proc import out = age18
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "18-25"; 
 run; 
 
 proc import out = age26
-	datafile = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
+	datafile = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\data\NSDUH\past_year\past_year_2003_2016.xlsx"
 	dbms = xlsx replace; 
 	getnames = yes; 
 	sheet = "26+"; 
@@ -1534,7 +1521,7 @@ run;
 
 *model looking at after vs. before past_year; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_noChapman.pdf" style = journal2; 
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_noChapman.pdf" style = journal2; 
 
 proc mixed data = past_year;
 	title "Past year use of marijuana: Cubic spline, age";
@@ -1561,7 +1548,7 @@ ods pdf close;
 
 *after vs. before (including new states): past year; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_noChapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_noChapman.pdf" style = journal2;
 
 
 proc mixed data = past_year_newStates;
@@ -1589,7 +1576,7 @@ ods pdf close;
 
 *overall restrictiveness model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = past_year; 
 	title "Past year use of marijuna: Cubic spline, age, binary MML Chapman index";
@@ -1638,7 +1625,7 @@ ods pdf close;
 
 *overall restrictiveness (including new states): past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_overall_Chapman.pdf" style = journal2;
 
 proc mixed data = past_year_newStates; 
 	title "Past year use of marijuana (including new states): Cubic spline, age, binary MML Chapman index";
@@ -1687,7 +1674,7 @@ ods pdf close;
 
 *initiation binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_initiation.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_initiation.pdf" style = journal2;
 
 proc mixed data = past_year; 
 	title "Past year use of marijuana: Cubic spline, age, binary initiation MML Chapman index";
@@ -1736,7 +1723,7 @@ ods pdf close;
 
 *initiation binary model (including new states): past year use;
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_initiation_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_initiation_Chapman.pdf" style = journal2;
 
 proc mixed data = past_year_newStates; 
 	title "Past year use of marijuana (including new states): Cubic spline, age, binary initiation MML Chapman index";
@@ -1785,7 +1772,7 @@ ods pdf close;
 
 *quantity binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_quantity.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_quantity.pdf" style = journal2;
 
 proc mixed data = past_year; 
 	title "Past year use of marijuana: Cubic spline, age, binary quantity MML Chapman index";
@@ -1834,7 +1821,7 @@ ods pdf close;
 
 *quantity binary model (including new states): past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_quantity_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_quantity_Chapman.pdf" style = journal2;
 
 proc mixed data = past_year_newStates; 
 	title "Past year use of marijuana (including new states): Cubic spline, age, binary quantity MML Chapman index";
@@ -1883,7 +1870,7 @@ ods pdf close;
 
 *distribution binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_distribution.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\past_year_2003_2016_binary_distribution.pdf" style = journal2;
 
 proc mixed data = past_year; 
 	title "Past year use of marijuana: Cubic spline, age, binary distribution MML Chapman index";
@@ -1932,7 +1919,7 @@ ods pdf close;
 
 *distribution binary model (including new states): past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive\Documents\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_distribution_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year\new_states_past_year_2003_2016_distribution_Chapman.pdf" style = journal2;
 
 proc mixed data = past_year_newStates; 
 	title "Past year use of marijuana (including new states): Cubic spline, age, binary distribution MML Chapman index";
