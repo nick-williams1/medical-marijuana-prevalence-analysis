@@ -303,9 +303,9 @@ ods pdf close;
 
 *model for overall restrictiveness: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month_MD_2014\past_month_2003_2016_overall_Chapman.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\past_month_2003_2016_overall_Chapman.pdf" style = journal2;
 
-proc mixed data = past_month_MD_2014; 
+proc mixed data = past_month_legal; 
 	title "Past month marijuana use: Cubic spline, age, binary MML Chapman index";
 	class abbrev age_grp mml_pass restrict; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -317,44 +317,44 @@ proc mixed data = past_month_MD_2014;
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*restrict / pdiff cl; 
 	estimate "Age 12-17: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 12-17: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 0 1 0 -1 0 
-				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 18-25: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 1 0 -1 0 
+				age_grp*mml_pass*restrict 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
 	estimate "Age 18-25: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
 	estimate "Age 26+: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 1 0 -1 0 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
 	estimate "Age 26+: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 1 0 -1 / cl; 
 run;
 
 ods pdf close; 
 
 *initiation binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month_MD_2014\past_month_2003_2016_binary_initiation.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\past_month_2003_2016_binary_initiation.pdf" style = journal2;
 
-proc mixed data = past_month_MD_2014; 
+proc mixed data = past_month_legal; 
 	title "Marijuana use in last month: Cubic spline, age, binary initiation MML Chapman index";
 	class abbrev age_grp mml_pass init_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -365,45 +365,45 @@ proc mixed data = past_month_MD_2014;
 				age_grp*init_binary mml_pass*init_binary age_grp*mml_pass age_grp*mml_pass*init_binary / solution ddfm = bw; 
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*init_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 0 1 0 -1 0 
-				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 1 0 -1 0 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 1 0 -1 0 
+				age_grp*mml_pass*init_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;  
 run;
 
 ods pdf close; 
 
 *quantity binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month_MD_2014\past_month_2003_2016_binary_quantity.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\past_month_2003_2016_binary_quantity.pdf" style = journal2;
 
-proc mixed data = past_month_MD_2014; 
+proc mixed data = past_month_legal; 
 	title "Marijuana use in last month: Cubic spline, age, binary quantity MML Chapman index";
 	class abbrev age_grp mml_pass quant_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -414,45 +414,45 @@ proc mixed data = past_month_MD_2014;
 				age_grp*quant_binary mml_pass*quant_binary age_grp*mml_pass age_grp*mml_pass*quant_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*quant_binary / pdiff cl; 
-	estimate "AGE 12-17: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 12-17: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0 
-				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 18-25: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "AGE 18-25: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 1 0 -1 0 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 1 0 -1 0 
+				age_grp*mml_pass*quant_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;  
 run; 
 
 ods pdf close; 
 
 *distribution binary model: past month use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_month_MD_2014\past_month_2003_2016_binary_distribution.pdf" style = journal2;
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\past_month_2003_2016_binary_distribution.pdf" style = journal2;
 
-proc mixed data = past_month_MD_2014; 
+proc mixed data = past_month_legal; 
 	title "Marijuana use in last month: Cubic spline, age, binary distribution MML Chapman index";
 	class abbrev age_grp mml_pass dist_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -463,36 +463,36 @@ proc mixed data = past_month_MD_2014;
 				age_grp*dist_binary mml_pass*dist_binary age_grp*mml_pass age_grp*mml_pass*dist_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*dist_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0 
-				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 1 0 -1 0 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 1 0 -1 0 
+				age_grp*mml_pass*dist_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;  
 run; 
 
 ods pdf close;
@@ -620,20 +620,22 @@ proc sort data = first_use;
 	by abbrev year; 
 run; 
 
-proc sort data = past_month_MD_2014; 
+proc sort data = past_month_legal; 
 	by abbrev year; 
 run; 
 
-data first_use_MD_2014;
-   merge first_use past_month_MD_2014 (drop = state year use);
+data first_use_legal;
+   merge first_use past_month_legal (drop = state year use);
    by abbrev;
+
+   if ever_pass = . then delete;
 run;
 
 *after vs. before: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use_MD_2014\first_use_2003_2016_noChapman.pdf" style = journal2; 
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\first_use_2003_2016_no_illegal_states.pdf" style = journal2; 
 
-proc mixed data = first_use_MD_2014;
+proc mixed data = first_use_legal;
 	title "First use of marijuana: Cubic spline, age";
 	class abbrev age_grp mml_pass; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -644,23 +646,19 @@ proc mixed data = first_use_MD_2014;
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass / pdiff cl; 
 	estimate "Age 12-17: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0;
+				mml_pass 1 -1 
+				age_grp*mml_pass 1 -1 0 0 0 0;
 	estimate "Age 18-25: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0;
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 1 -1 0 0;
 	estimate "Age 26+: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0;
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1;
 run; 
-
-ods pdf close; 
 
 *overall restrictiveness model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use_MD_2014\first_use_2003_2016_overall_Chapman.pdf" style = journal2;
-
-proc mixed data = first_use_MD_2014; 
+proc mixed data = first_use_legal; 
 	title "First use of marijuna: Cubic spline, age, binary MML Chapman index";
 	class abbrev age_grp mml_pass restrict; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -672,44 +670,40 @@ proc mixed data = first_use_MD_2014;
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*restrict / pdiff cl; 
 	estimate "Age 12-17: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 12-17: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 0 1 0 -1 0 
-				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 18-25: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 1 0 -1 0 
+				age_grp*mml_pass*restrict 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
 	estimate "Age 18-25: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
 	estimate "Age 26+: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 1 0 -1 0 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
 	estimate "Age 26+: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;  
 run;
-
-ods pdf close; 
 
 *initiation binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use_MD_2014\first_use_2003_2016_binary_initiation.pdf" style = journal2;
-
-proc mixed data = first_use_MD_2014; 
+proc mixed data = first_use_legal; 
 	title "First use of marijuana: Cubic spline, age, binary initiation MML Chapman index";
 	class abbrev age_grp mml_pass init_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -720,45 +714,41 @@ proc mixed data = first_use_MD_2014;
 				age_grp*init_binary mml_pass*init_binary age_grp*mml_pass age_grp*mml_pass*init_binary / solution ddfm = bw; 
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*init_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 0 1 0 -1 0 
-				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 1 0 -1 0 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 1 0 -1 0 
+				age_grp*mml_pass*init_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;  
 run;
-
-ods pdf close; 
 
 *quantity binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use_MD_2014\first_use_2003_2016_binary_quantity.pdf" style = journal2;
-
-proc mixed data = first_use_MD_2014; 
+proc mixed data = first_use_legal; 
 	title "First use of marijuana: Cubic spline, age, binary quantity MML Chapman index";
 	class abbrev age_grp mml_pass quant_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -769,45 +759,41 @@ proc mixed data = first_use_MD_2014;
 				age_grp*quant_binary mml_pass*quant_binary age_grp*mml_pass age_grp*mml_pass*quant_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*quant_binary / pdiff cl; 
-	estimate "AGE 12-17: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 12-17: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0 
-				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 18-25: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "AGE 18-25: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 1 0 -1 0 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 1 0 -1 0 
+				age_grp*mml_pass*quant_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;
 run; 
-
-ods pdf close; 
 
 *distribution binary model: first use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\first_use_MD_2014\first_use_2003_2016_binary_distribution.pdf" style = journal2;
-
-proc mixed data = first_use_MD_2014; 
+proc mixed data = first_use_legal; 
 	title "First use of marijuana: Cubic spline, age, binary distribution MML Chapman index";
 	class abbrev age_grp mml_pass dist_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -818,36 +804,36 @@ proc mixed data = first_use_MD_2014;
 				age_grp*dist_binary mml_pass*dist_binary age_grp*mml_pass age_grp*mml_pass*dist_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*dist_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0 
-				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 1 0 -1 0 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 1 0 -1 0 
+				age_grp*mml_pass*dist_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl; 
 run; 
 
 ods pdf close;
@@ -975,20 +961,22 @@ proc sort data = past_year;
 	by abbrev year; 
 run; 
 
-proc sort data = past_month_MD_2014; 
+proc sort data = past_month_legal; 
 	by abbrev year; 
 run; 
 
-data past_year_MD_2014;
-   merge past_year past_month_MD_2014 (drop = state year use);
+data past_year_legal;
+   merge past_year past_month_legal (drop = state year use);
    by abbrev;
+
+   if ever_pass = . then delete; 
 run;
 
 *model looking at after vs. before past_year; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year_MD_2014\past_year_2003_2016_noChapman.pdf" style = journal2; 
+ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\binary_chapman\no_illegal_states\past_year_2003_2016_no_illegal_states.pdf" style = journal2; 
 
-proc mixed data = past_year_MD_2014;
+proc mixed data = past_year_legal;
 	title "Past year use of marijuana: Cubic spline, age";
 	class abbrev age_grp mml_pass; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -999,23 +987,19 @@ proc mixed data = past_year_MD_2014;
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass / pdiff cl; 
 	estimate "Age 12-17: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0;
+				mml_pass 1 -1 
+				age_grp*mml_pass 1 -1 0 0 0 0;
 	estimate "Age 18-25: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0;
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 1 -1 0 0;
 	estimate "Age 26+: After to Before" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0;
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1;
 run; 
-
-ods pdf close; 
 
 *overall restrictiveness model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year_MD_2014\past_year_2003_2016_overall_Chapman.pdf" style = journal2;
-
-proc mixed data = past_year_MD_2014; 
+proc mixed data = past_year_legal; 
 	title "Past year use of marijuna: Cubic spline, age, binary MML Chapman index";
 	class abbrev age_grp mml_pass restrict; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -1027,44 +1011,40 @@ proc mixed data = past_year_MD_2014;
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*restrict / pdiff cl; 
 	estimate "Age 12-17: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 12-17: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*restrict 0 1 0 -1 0 
-				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
 	estimate "Age 18-25: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*restrict 1 0 -1 0 0 
-				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 1 0 -1 0 
+				age_grp*mml_pass*restrict 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
 	estimate "Age 18-25: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
 	estimate "Age 26+: After to Before, High Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 1 0 -1 0 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 1 0 -1 0
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
 	estimate "Age 26+: After to Before, Low Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*restrict 0 1 0 -1 0
-				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*restrict 0 1 0 -1
+				age_grp*mml_pass*restrict 0 0 0 0 0 0 0 0 0 1 0 -1 / cl; 
 run;
-
-ods pdf close; 
 
 *initiation binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year_MD_2014\past_year_2003_2016_binary_initiation.pdf" style = journal2;
-
-proc mixed data = past_year_MD_2014; 
+proc mixed data = past_year_legal; 
 	title "Past year use of marijuana: Cubic spline, age, binary initiation MML Chapman index";
 	class abbrev age_grp mml_pass init_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -1075,45 +1055,41 @@ proc mixed data = past_year_MD_2014;
 				age_grp*init_binary mml_pass*init_binary age_grp*mml_pass age_grp*mml_pass*init_binary / solution ddfm = bw; 
 	random abbrev / group = age_grp; 
 	*lsmeans age_grp*mml_pass*init_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*init_binary 0 1 0 -1 0 
-				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*init_binary 1 0 -1 0 0 
-				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 1 0 -1 0 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Initiation Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*init_binary 0 1 0 -1 0
-				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 1 0 -1 0 
+				age_grp*mml_pass*init_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 1 0 -1 0
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*init_binary 0 1 0 -1
+				age_grp*mml_pass*init_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;   
 run;
-
-ods pdf close; 
 
 *quantity binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year_MD_2014\past_year_2003_2016_binary_quantity.pdf" style = journal2;
-
-proc mixed data = past_year_MD_2014; 
+proc mixed data = past_year_legal; 
 	title "Past year use of marijuana: Cubic spline, age, binary quantity MML Chapman index";
 	class abbrev age_grp mml_pass quant_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -1124,45 +1100,41 @@ proc mixed data = past_year_MD_2014;
 				age_grp*quant_binary mml_pass*quant_binary age_grp*mml_pass age_grp*mml_pass*quant_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*quant_binary / pdiff cl; 
-	estimate "AGE 12-17: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 12-17: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0 
-				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "AGE 18-25: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 1 0 -1 0 0 
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "AGE 18-25: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 1 0 -1 0 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Quantity Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*quant_binary 0 1 0 -1 0
-				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 1 0 -1 0 
+				age_grp*mml_pass*quant_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 1 0 -1 0
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*quant_binary 0 1 0 -1
+				age_grp*mml_pass*quant_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;
 run; 
-
-ods pdf close;
 
 *distribution binary model: past year use; 
 
-ods pdf file = "C:\Users\niwi8\OneDrive - cumc.columbia.edu\Practicum\MML_analysis\MML_chapman_index\reports\past_year_MD_2014\past_year_2003_2016_binary_distribution.pdf" style = journal2;
-
-proc mixed data = past_year_MD_2014; 
+proc mixed data = past_year_legal; 
 	title "Past year use of marijuana: Cubic spline, age, binary distribution MML Chapman index";
 	class abbrev age_grp mml_pass dist_binary; 
 	model use = yearcont yearcont*yearcont yearcont*yearcont*yearcont
@@ -1173,36 +1145,36 @@ proc mixed data = past_year_MD_2014;
 				age_grp*dist_binary mml_pass*dist_binary age_grp*mml_pass age_grp*mml_pass*dist_binary / solution ddfm = bw outpm = pred; 
 	random abbrev / group = age_grp;
 	*lsmeans age_grp*mml_pass*dist_binary / pdiff cl; 
-	estimate "Age 12-17: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 12-17: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 1 -1 0 0 0 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0 
-				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 0 0 0 / cl;
-	estimate "Age 18-25: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 1 0 -1 0 0 
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 0 / cl; 
-	estimate "Age 18-25: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 1 -1 0 0 0 0 
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 1 0 -1 0 0 0 0 0 0 / cl; 
-	estimate "Age 26+: After to Before, High Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 1 0 -1 0 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 0 / cl; 
-	estimate "Age 26+: After to Before, Low Distribution Restrictiveness" 
-				mml_pass 1 -1 0 
-				age_grp*mml_pass 0 0 0 0 0 0 1 -1 0
-				mml_pass*dist_binary 0 1 0 -1 0
-				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 0 0 1 0 -1 0 / cl; ; 
+	estimate "Age 12-17: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 1 0 -1 0 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 12-17: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 1 -1 0 0 0 0 
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 1 0 -1 0 0 0 0 0 0 0 0 / cl;
+	estimate "Age 18-25: After to Before, High Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 1 0 -1 0 
+				age_grp*mml_pass*dist_binary 0 0 0 0 1 0 -1 0 0 0 0 0 / cl; 
+	estimate "Age 18-25: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1 
+				age_grp*mml_pass 0 0 1 -1 0 0
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 1 0 -1 0 0 0 0 / cl; 
+	estimate "Age 26+: After to Before, High Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 1 0 -1 0
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 1 0 -1 0/ cl; 
+	estimate "Age 26+: After to Before, Low Restrictiveness" 
+				mml_pass 1 -1
+				age_grp*mml_pass 0 0 0 0 1 -1
+				mml_pass*dist_binary 0 1 0 -1
+				age_grp*mml_pass*dist_binary 0 0 0 0 0 0 0 0 0 1 0 -1 / cl;
 run; 
 
 ods pdf close;
