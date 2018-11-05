@@ -1,0 +1,75 @@
+---
+output:
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(haven)
+library(wesanderson)
+
+theme_set(theme_bw())
+```
+
+```{r echo = FALSE}
+mj_use <- read_sas("../data/clean/all_use.sas7bdat") %>% 
+  mutate(age_grp = as_factor(as.character(age_grp)), 
+         age_grp = fct_recode(age_grp,
+                              "12 - 17" = "1",
+                              "18 - 25" = "2",
+                              "26+" = "3"))
+
+past_month_mml <- mj_use %>% 
+  filter(mml_pass != "never") %>% 
+  select(state, year, age_grp, month_use) %>% 
+  mutate(ind = "MML states")
+
+past_month_illegal <- mj_use %>% 
+  filter(mml_pass == "never") %>% 
+  select(state, year, age_grp, month_use) %>% 
+  mutate(ind = "No MML states")
+
+past_month_all <- mj_use %>% 
+  select(state, year, age_grp, month_use) %>% 
+  mutate(ind = "All states")
+```
+
+```{r echo = FALSE, out.width = "85%", fig.height = 6.5, fig.align = "center", dpi = 300}
+pm_all <- past_month_all %>%  
+  group_by(year, ind, age_grp) %>% 
+  summarize(avg_use = mean(month_use))
+
+pm_illegal <- past_month_illegal %>% 
+  group_by(year, ind, age_grp) %>% 
+  summarize(avg_use = mean(month_use))
+
+pm_mml <- past_month_mml %>%
+  group_by(year, ind, age_grp) %>% 
+  summarize(avg_use = mean(month_use))
+
+bind_rows(pm_all, pm_illegal, pm_mml) %>% 
+  ggplot(aes(x = year, y = avg_use, color = ind)) +
+  geom_line(size = .75) + 
+  facet_wrap(vars(age_grp),
+             ncol = 1,
+             scales = "free") + 
+  scale_color_manual(
+    values = wes_palette("IsleofDogs1",
+                         type = c("discrete")),
+    name = "MML status"
+    ) +
+  labs(title = "Average marijuana use, 2003-2016",
+       x = "Year", 
+       y = "Average past-month marijuana use (%)", 
+       caption = "Stratified by age group") +
+  theme(strip.background = element_blank(), 
+        strip.text = element_text(color = "black"), 
+        legend.position = "bottom", 
+        legend.direction = "horizontal", 
+        axis.title.y = element_text(margin = margin(r = 10)), 
+        legend.box.spacing = unit(0.05, "cm"), 
+        plot.title = element_text(size = 13))
+```
+
